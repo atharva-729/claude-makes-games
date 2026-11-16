@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>Ember Hop - level solver / overview</title>
+<style>body{margin:0;background:#111;color:#ddd;font:12px monospace}canvas{display:block}</style></head>
+<body>
+<pre id="out">running...</pre>
+<canvas id="map" width="1600" height="720"></canvas>
+<script src="game.js"></script>
+<script>
+// Dev tool, not part of the game. Runs the real simulation with a breadth-first search over
+// inputs to prove each level can be finished and each coin can be reached, then draws overviews.
+(function () {
+  const G = window.EmberHop, out = [];
+  const acts = [];
+  [1, 0, -1].forEach(d => [false, true].forEach(j => [false, true].forEach(dn => {
+    if (dn && !j) return;
+    acts.push({ left: d < 0, right: d > 0, jump: j, down: dn });
+  })));
+  function solve(L, limit) {
+    const q = [G.newState(L)], seen = new Set(), coins = new Uint8Array(L.coins.length);
+    let head = 0, n = 0, doneT = Infinity, best = 0;
+    while (head < q.length && n < limit) {
+      const s = q[head]; q[head++] = null;
+      for (const a of acts) {
+        const c = G.cloneState(s); let dead = false;
+        for (let i = 0; i < 6; i++) {
+          G.step(L, c, a);
+          for (const e of c.ev) if (e.k === 'coin') coins[e.i] = 1;
+          c.ev.length = 0;
+          if (c.p.dead) { dead = true; break; }
+          if (c.done) break;
+        }
+        n++;
+        if (dead) continue;
+        if (c.done) { doneT = Math.min(doneT, c.t); continue; }
+        const p = c.p;
+        const vyb = Math.max(0, Math.min(11, Math.floor((p.vy + 1100) / 180)));
+        const key = ((((((Math.floor(p.x / 8) * 256 + Math.floor((p.y + 200) / 8)) * 12 + vyb) * 3 + (Math.sign(p.vx) + 1)) * 2 + (p.ground ? 1 : 0)) * 2 + (p.jh ? 1 : 0)) * 2 + (p.drop > 0 ? 1 : 0)) * 32 + (p.ride >= 0 ? 1 + Math.floor(c.t * 2) % 31 : 0);
+        if (seen.has(key)) continue;
+        seen.add(key); q.push(c);
+        if (p.x > best) best = p.x;
+      }
+    }
+    const miss = [];
+    coins.forEach((v, i) => { if (!v) miss.push('(' + Math.floor(L.coins[i].x / G.T) + ',' + Math.floor(L.coins[i].y / G.T) + ')'); });
+    return { doneT, n, best, miss, exhausted: head >= q.length };
+  }
+  const nosolve = /nosolve/.test(location.hash);
+  const cv = document.getElementById('map'), c = cv.getContext('2d');
+  let y = 0;
+  G.LEVELS.forEach((L, i) => {
+    if (!nosolve) {
+      const t0 = performance.now(), r = solve(L, 6e6);
+      out.push('LEVEL ' + (i + 1) + ' ' + L.name + ': ' + (r.doneT < Infinity ? 'SOLVABLE fastest=' + r.doneT.toFixed(2) + 's' : 'NOT SOLVED bestX=' + (r.best / G.T).toFixed(1)) +
+        ' nodes=' + r.n + ' exhausted=' + r.exhausted + ' coins=' + L.coins.length + ' unreachedCoins=' + (r.miss.length ? r.miss.join(' ') : 'none') + ' ms=' + Math.round(performance.now() - t0));
+    }
+    const k = 1600 / (L.w * G.T);
+    c.save(); c.translate(0, y); c.scale(k, k);
+    G.drawWorld(c, L, G.newState(L), 0, 0, L.w * G.T, L.h * G.T, 0, null);
+    c.restore();
+    y += L.h * G.T * k + 8;
+  });
+  document.getElementById('out').textContent = out.join('\n') || 'solver skipped';
+})();
+</script>
+</body>
+</html>

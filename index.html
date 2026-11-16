@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claude makes games</title>
+<style>
+  :root { --bg:#0b0f17; --card:#141b27; --line:#232d3d; --text:#e6e9ef; --dim:#8b95a7; --accent:#f5c96a; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:16px/1.5 system-ui, -apple-system, Segoe UI, sans-serif; }
+  main { max-width:1080px; margin:0 auto; padding:48px 20px 64px; }
+  h1 { font-size:2.2rem; margin:0 0 8px; }
+  h2 { font-size:1.2rem; margin:48px 0 6px; }
+  p.lead { color:var(--dim); margin:0 0 8px; max-width:720px; }
+  p.sub { color:var(--dim); margin:0 0 18px; font-size:.95rem; }
+  a { color:var(--accent); }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); gap:18px; }
+  .card { display:block; background:var(--card); border:1px solid var(--line); border-radius:10px; overflow:hidden; text-decoration:none; color:inherit; transition:transform .15s, border-color .15s; }
+  .card:hover { transform:translateY(-3px); border-color:var(--accent); }
+  .card img { display:block; width:100%; aspect-ratio:16/9; object-fit:cover; background:#000; }
+  .card .body { padding:12px 14px 14px; }
+  .card h3 { margin:0 0 4px; font-size:1.05rem; }
+  .card .meta { color:var(--dim); font-size:.85rem; }
+  .card .play { margin-top:8px; font-size:.85rem; color:var(--accent); font-weight:600; }
+  .featured { display:grid; grid-template-columns:1.4fr 1fr; }
+  .featured img { height:100%; aspect-ratio:auto; }
+  .featured .body { padding:20px 22px; }
+  .featured h3 { font-size:1.5rem; }
+  .featured ul { color:var(--dim); font-size:.92rem; padding-left:18px; margin:10px 0; }
+  kbd { background:#222b3a; border:1px solid var(--line); border-radius:4px; padding:0 5px; font-size:.85em; }
+  @media (max-width:760px) { .featured { grid-template-columns:1fr; } }
+  footer { margin-top:56px; color:var(--dim); font-size:.85rem; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Claude makes games</h1>
+  <p class="lead">Experiments in how far AI coding models get when building games on their own. Each game was written start to finish by an AI agent from a single prompt, with no human-written code or assets. Everything, including art and music, is generated in code.</p>
+  <p class="sub">Keyboard required. Best played on desktop. Click a game to play.</p>
+
+  <h2>Featured: a dark action-platformer with a boss</h2>
+  <p class="sub">Built by Fable 5.2 from a detailed design spec (<a href="https://github.com/atharva-729/claude-makes-games/blob/main/prompts/A1-careful.md">read the prompt</a>).</p>
+  <a class="card featured" href="runs/A1/fable-careful/">
+    <img src="runs/A1/fable-careful/_check.png" alt="WICKFALL title screen">
+    <div class="body">
+      <h3>WICKFALL</h3>
+      <div class="meta">a night in The Unlit Vale</div>
+      <ul>
+        <li>Sword combat with up/down slashes and pogo</li>
+        <li>Dash, wall-jump, healing, energy bolts</li>
+        <li>3 enemy types, a hidden secret</li>
+        <li>3-phase boss: Vesperhorn, Warden of the Unlit Hour</li>
+      </ul>
+      <div class="meta">Move <kbd>←→</kbd>/<kbd>WASD</kbd> · Jump <kbd>Space</kbd> · Slash <kbd>X</kbd> · Dash <kbd>C</kbd> · Heal hold <kbd>F</kbd></div>
+      <div class="play">Play →</div>
+    </div>
+  </a>
+
+  <h2>Round 1: basic platformer, 2 models × 2 prompts</h2>
+  <p class="sub">Same task for both models. "Generic" is a one-line prompt (<em>"Make a 2D platformer game."</em>); "careful" is a <a href="https://github.com/atharva-729/claude-makes-games/blob/main/prompts/L1-careful.md">detailed spec</a>. The generic runs made bigger, more fun games; the careful runs made cleaner, more editable code. <a href="https://github.com/atharva-729/claude-makes-games/blob/main/results.md">Full results</a>.</p>
+  <div class="grid">
+    <a class="card" href="runs/L1/fable-generic/">
+      <img src="runs/L1/fable-generic/_check.png" alt="Ember Hop">
+      <div class="body"><h3>Ember Hop</h3><div class="meta">Fable 5.2 · generic prompt</div><div class="meta">3 levels, enemies, springs, music</div><div class="play">Play →</div></div>
+    </a>
+    <a class="card" href="runs/L1/opus-generic/">
+      <img src="runs/L1/opus-generic/_check.png" alt="Pip's Leap">
+      <div class="body"><h3>Pip's Leap</h3><div class="meta">Opus 5.5 · generic prompt</div><div class="meta">4 levels, wall-jump, gamepad, music</div><div class="play">Play →</div></div>
+    </a>
+    <a class="card" href="runs/L1/opus-careful/">
+      <img src="runs/L1/opus-careful/_check.png" alt="Pip's Dash">
+      <div class="body"><h3>Pip's Dash</h3><div class="meta">Opus 5.5 · careful prompt</div><div class="meta">1 level, checkpoints, tutorial signs</div><div class="play">Play →</div></div>
+    </a>
+    <a class="card" href="runs/L1/fable-careful/">
+      <img src="runs/L1/fable-careful/_check.png" alt="Sky Hop">
+      <div class="body"><h3>Sky Hop</h3><div class="meta">Fable 5.2 · careful prompt</div><div class="meta">1 level, checkpoints, sound effects</div><div class="play">Play →</div></div>
+    </a>
+  </div>
+
+  <footer>Source and prompts: <a href="https://github.com/atharva-729/claude-makes-games">github.com/atharva-729/claude-makes-games</a></footer>
+</main>
+</body>
+</html>
