@@ -828,15 +828,23 @@ var Assets = (function () {
     ctx.restore();
   };
 
-  var CONTROLS = [
-    ['Move / aim', 'Arrow keys or WASD'], ['Jump', 'Space or Z  (hold for height)'], ['Slash', 'X or J  (hold Up / Down to aim)'],
-    ['Dash', 'C, K or Shift'], ['Energy bolt', 'V or L'], ['Mend a wound', 'hold F, standing still'],
-    ['Pause', 'Esc or P'], ['Return to rest point', 'R'], ['Mute', 'M']
-  ];
+  // Built from the live key bindings (controls.js) so remapped keys show up here.
+  function controlRows() {
+    var K = Controls.label;
+    return [
+      ['Move / aim', Controls.moveLabel()], ['Jump', K('jump') + '  (hold for height)'],
+      ['Slash', K('attack') + '  (hold ' + K('up', 1) + ' / ' + K('down', 1) + ' to aim, ' + K('down', 1) + ' in air = pogo)'],
+      ['Dash', K('dash')], ['Energy bolt', K('bolt')], ['Mend a wound', 'hold ' + K('heal') + '  (standing still)'],
+      ['Pause / rest point / mute', 'Esc or P  /  R  /  M'],
+      ['Testing aids', 'F1 invincibility  /  F2 skip to the boss'],
+      ['Change keys', 'O']
+    ];
+  }
   function drawControls(ctx, x, y) {
-    for (var i = 0; i < CONTROLS.length; i++) {
-      text(ctx, CONTROLS[i][0], x - 12, y + i * 23, 15, rgba(C.gold, 0.95), 'right', 'italic');
-      text(ctx, CONTROLS[i][1], x + 12, y + i * 23, 15, 'rgba(215,236,242,0.92)', 'left');
+    var rows = controlRows();
+    for (var i = 0; i < rows.length; i++) {
+      text(ctx, rows[i][0], x - 12, y + i * 23, 15, rgba(C.gold, 0.95), 'right', 'italic');
+      text(ctx, rows[i][1], x + 12, y + i * 23, 15, 'rgba(215,236,242,0.92)', 'left');
     }
   }
 

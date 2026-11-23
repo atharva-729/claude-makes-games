@@ -41,14 +41,14 @@ var LEVEL = {
 
   entities: [
     // --- 1. quiet opening
-    { type: 'hint', x: 6, y: 21.2, text: 'Arrows / WASD to move  -  Space to jump' },
+    { type: 'hint', x: 6, y: 21.2, text: '{move} to move  -  {jump} to jump' },
     { type: 'lantern', x: 9, y: 24 },
-    { type: 'hint', x: 20, y: 21.2, text: 'X to slash' },
+    { type: 'hint', x: 20, y: 21.2, text: '{attack} to slash' },
     { type: 'grub', x: 22, y: 24 },
     { type: 'lantern', x: 27, y: 24 },
     { type: 'crystal', x: 18.5, y: 24, color: 'cyan' },
     // --- 2. dash gap and wall-jump shaft
-    { type: 'hint', x: 28.5, y: 20.6, text: 'C to dash  -  jump, then dash across' },
+    { type: 'hint', x: 28.5, y: 20.6, text: '{dash} to dash  -  jump, then dash across' },
     { type: 'crystal', x: 33, y: 28, color: 'violet', hang: false },
     { type: 'lantern', x: 37.5, y: 24 },
     { type: 'hint', x: 44.5, y: 22.2, text: 'Leap from wall to wall' },
@@ -56,13 +56,13 @@ var LEVEL = {
     { type: 'crystal', x: 45.8, y: 14.5, color: 'cyan', wall: -1 },
     { type: 'rest', x: 48, y: 12, id: 'rest1' },
     // --- 3. spike corridor
-    { type: 'hint', x: 50.2, y: 9, text: 'In the air: hold Down + X to bounce off spikes' },
+    { type: 'hint', x: 50.2, y: 9, text: 'In the air: hold {down} + {attack} to bounce off spikes' },
     { type: 'crystal', x: 56, y: 7, color: 'violet', hang: true },
     { type: 'lantern', x: 61.9, y: 12 },
     { type: 'crystal', x: 67, y: 7, color: 'violet', hang: true },
     { type: 'flyer', x: 68, y: 8.6 },
     // --- 4. mixed encounters
-    { type: 'hint', x: 75, y: 9.2, text: 'Hold F to mend  -  V to loose a bolt' },
+    { type: 'hint', x: 75, y: 9.2, text: 'Hold {heal} to mend  -  {bolt} to loose a bolt' },
     { type: 'crawler', x: 77.5, y: 12 },
     { type: 'spitter', x: 82.5, y: 10 },
     { type: 'lantern', x: 74.5, y: 12 },

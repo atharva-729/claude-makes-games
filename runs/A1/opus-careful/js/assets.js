@@ -435,11 +435,11 @@ function drawSign(ctx, d, t, alpha) {
   if (alpha > 0.01) {
     glow(ctx, x, y - 22, 20, '#bff6ff', 0.3 * alpha);
     ctx.font = '15px ' + FONT_DISPLAY; ctx.textAlign = 'center';
-    var tw = ctx.measureText(d.text).width;
+    var txt = Controls.fill(d.text), tw = ctx.measureText(txt).width;
     ctx.fillStyle = 'rgba(3,8,16,' + (0.55 * alpha) + ')';
     ctx.fillRect(x - tw / 2 - 12, y - 78, tw + 24, 26);
     ctx.fillStyle = 'rgba(214,246,255,' + alpha + ')';
-    ctx.fillText(d.text, x, y - 60);
+    ctx.fillText(txt, x, y - 60);
   }
 }
 function drawRestPoint(ctx, r, t, active, near) {
@@ -1181,20 +1181,26 @@ function drawToast(ctx, text, alpha) {
   ctx.restore();
 }
 
-var CONTROLS_TEXT = [
-  ['Move / aim', 'Arrows or WASD'],
-  ['Jump', 'Space or Z  (hold = higher)'],
-  ['Slash', 'X or J  (+Up / +Down in air)'],
-  ['Dash', 'C, K or Shift'],
-  ['Light bolt', 'V or L'],
-  ['Mend (heal)', 'hold F, standing still'],
-  ['Rest at shrine', 'Up'],
-  ['Pause / Restart', 'Esc or P  /  R'],
-  ['Mute', 'M']
-];
+// Built from the live key bindings (controls.js) so remapped keys show up here.
+function controlRows() {
+  var K = Controls.label;
+  return [
+    ['Move / aim', Controls.moveLabel()],
+    ['Jump', K('jump') + '  (hold = higher)'],
+    ['Slash', K('attack') + '  (+' + K('up', 1) + ' / +' + K('down', 1) + ' in air; ' + K('down', 1) + ' = pogo)'],
+    ['Dash', K('dash')],
+    ['Light bolt', K('bolt')],
+    ['Mend (heal)', 'hold ' + K('heal') + '  (standing still)'],
+    ['Rest at shrine', K('up', 1)],
+    ['Pause / Restart / Mute', 'Esc or P  /  R  /  M'],
+    ['Testing aids', 'F1 invincibility  /  F2 skip to the boss'],
+    ['Change keys', 'O']
+  ];
+}
 function drawControls(ctx, y, alpha) {
   ctx.save(); ctx.globalAlpha = alpha;
   ctx.font = '15px ' + FONT_UI;
+  var CONTROLS_TEXT = controlRows();
   for (var i = 0; i < CONTROLS_TEXT.length; i++) {
     var yy = y + i * 23;
     ctx.textAlign = 'right'; ctx.fillStyle = 'rgba(160,200,215,0.85)'; ctx.fillText(CONTROLS_TEXT[i][0], CFG.W / 2 - 14, yy);

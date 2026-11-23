@@ -1,19 +1,19 @@
 // WICKFALL - input, world, collisions, camera, game states, main loop.
 var Input = (function () {
-  var MAP = {
-    ArrowLeft: 'left', KeyA: 'left', ArrowRight: 'right', KeyD: 'right', ArrowUp: 'up', KeyW: 'up', ArrowDown: 'down', KeyS: 'down',
-    Space: 'jump', KeyZ: 'jump', KeyX: 'attack', KeyJ: 'attack', KeyC: 'dash', KeyK: 'dash', ShiftLeft: 'dash', ShiftRight: 'dash',
-    KeyV: 'bolt', KeyL: 'bolt', KeyF: 'heal', Escape: 'pause', KeyP: 'pause', KeyR: 'restart', Enter: 'enter', NumpadEnter: 'enter',
-    KeyM: 'mute', F1: 'f1', F2: 'f2'
-  };
+  // Remappable keys live in controls.js (added 2026-11-23); these are the fixed ones.
+  Controls.init({
+    storageKey: 'wickfall.keys.v1',
+    names: { bolt: 'Energy bolt', heal: 'Mend a wound (hold)' },
+    fixed: { Escape: 'pause', KeyP: 'pause', KeyR: 'restart', Enter: 'enter', NumpadEnter: 'enter', KeyM: 'mute', F1: 'f1', F2: 'f2' }
+  });
   var I = { down: {}, pressed: {}, codes: {} };
   function refresh() {
     var d = {};
-    for (var c in I.codes) if (I.codes[c] && MAP[c]) d[MAP[c]] = true;
+    for (var c in I.codes) { var a = I.codes[c] && Controls.action(c); if (a) d[a] = true; }
     I.down = d;
   }
   I.keydown = function (code) {
-    var a = MAP[code]; if (!a) return false;
+    var a = Controls.action(code); if (!a) return false;
     if (!I.codes[code]) I.pressed[a] = true;
     I.codes[code] = true; refresh(); return true;
   };
@@ -26,6 +26,7 @@ var Input = (function () {
   });
   window.addEventListener('keyup', function (e) { I.keyup(e.code); });
   window.addEventListener('blur', function () { I.reset(); });
+  Controls.onPanel(function () { I.reset(); });
   return I;
 })();
 
@@ -548,7 +549,7 @@ var Game = (function () {
     A.drawParticles(ctx, G.particles);
     if (G.state !== 'title') G.hints.forEach(function (h) {
       var d = Math.abs(p.x - h.px), a = clampN((G.cardT - 5.5) / 1.5, 0, 1) * clampN(1 - (d - 240) / 200, 0, 1) * clampN(1 - (Math.abs(p.y - h.py) - 200) / 150, 0, 1);
-      if (a > 0) A.drawHint(ctx, h.px, h.py, h.text, a * 0.9);
+      if (a > 0) A.drawHint(ctx, h.px, h.py, Controls.fill(h.text), a * 0.9);
     });
     ctx.restore();
 
@@ -592,6 +593,9 @@ var Game = (function () {
       while (acc >= CFG.STEP) { G.step(CFG.STEP); acc -= CFG.STEP; }
       Sound.update();
       G.render();
+      var p = G.player;
+      Controls.tick(dt, { menu: G.state === 'title' || G.state === 'pause', playing: G.state === 'play', deaths: G.deaths,
+        x: p ? p.x : 0, y: p ? p.y : 0, boss: G.bossActive, god: G.god, canvas: canvas });
       requestAnimationFrame(frame);
     }
     requestAnimationFrame(frame);

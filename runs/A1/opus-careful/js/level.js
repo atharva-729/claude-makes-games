@@ -77,12 +77,12 @@ var LEVEL = {
   entities: [
     // 1. quiet opening
     { type: 'lantern', x: 9, y: 55 },
-    { type: 'sign', x: 6, y: 55, text: 'Arrows / WASD  move      Space / Z  jump (hold for height)' },
-    { type: 'sign', x: 19, y: 55, text: 'X / J  slash      hold Up + slash to strike above' },
+    { type: 'sign', x: 6, y: 55, text: '{move}  move      {jump}  jump (hold for height)' },
+    { type: 'sign', x: 19, y: 55, text: '{attack}  slash      hold {up} + slash to strike above' },
     { type: 'grub', x: 21, y: 55 },
     { type: 'lantern', x: 29, y: 52 },
     { type: 'lantern', x: 38, y: 55 },
-    { type: 'sign', x: 41, y: 55, text: 'C / K / Shift  dash - also once in mid-air' },
+    { type: 'sign', x: 41, y: 55, text: '{dash}  dash - also once in mid-air' },
     // 2. dash gap, shaft
     { type: 'lantern', x: 56, y: 55 },
     { type: 'sign', x: 61, y: 55, text: 'Jump against a wall, then jump again to climb' },
@@ -92,14 +92,14 @@ var LEVEL = {
     { type: 'heart', x: 71, y: 42 },
     { type: 'crystal', x: 73, y: 42 },
     // 3. spike corridor
-    { type: 'sign', x: 69, y: 29, text: 'In the air, hold Down + slash to strike below - bounce off spikes and foes' },
+    { type: 'sign', x: 69, y: 29, text: 'In the air, hold {down} + slash to strike below - bounce off spikes and foes' },
     { type: 'hanglamp', x: 76, y: 22 },
     { type: 'crystal', x: 82, y: 26 },
     { type: 'hanglamp', x: 92, y: 22 },
     { type: 'flyer', x: 91, y: 25 },
     { type: 'hanglamp', x: 103, y: 22 },
     // 4. mixed encounters
-    { type: 'sign', x: 104, y: 29, text: 'Hits gather light.  Hold F still to mend.  V / L  cast a light bolt' },
+    { type: 'sign', x: 104, y: 29, text: 'Hits gather light.  Hold {heal} still to mend.  {bolt}  cast a light bolt' },
     { type: 'lantern', x: 108, y: 29 },
     { type: 'crawler', x: 112, y: 29 },
     { type: 'flyer', x: 117, y: 21 },
@@ -122,7 +122,7 @@ var LEVEL = {
     { type: 'hanglamp', x: 167, y: 20 },
     // 5. rest point
     { type: 'rest', x: 183, y: 29 },
-    { type: 'sign', x: 179, y: 29, text: 'Press Up at the shrine to rest' },
+    { type: 'sign', x: 179, y: 29, text: 'Press {up} at the shrine to rest' },
     // 7. boss arena
     { type: 'brazier', x: 199, y: 37 },
     { type: 'brazier', x: 224, y: 37 },

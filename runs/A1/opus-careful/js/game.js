@@ -4,15 +4,12 @@
   var canvas, ctx;
 
   // ====================================================================== input
-  var KEYMAP = {
-    ArrowLeft: 'left', KeyA: 'left', ArrowRight: 'right', KeyD: 'right',
-    ArrowUp: 'up', KeyW: 'up', ArrowDown: 'down', KeyS: 'down',
-    Space: 'jump', KeyZ: 'jump', KeyX: 'attack', KeyJ: 'attack',
-    KeyC: 'dash', KeyK: 'dash', ShiftLeft: 'dash', ShiftRight: 'dash',
-    KeyV: 'bolt', KeyL: 'bolt', KeyF: 'heal',
-    Escape: 'pause', KeyP: 'pause', KeyR: 'restart', Enter: 'enter', NumpadEnter: 'enter',
-    KeyM: 'mute', F1: 'debugGod', F2: 'debugWarp'
-  };
+  // Remappable keys live in controls.js (added 2026-11-23); these are the fixed ones.
+  Controls.init({
+    storageKey: 'gloamreach.keys.v1',
+    names: { bolt: 'Light bolt', heal: 'Mend (hold)', up: 'Up (aim up, rest at shrine)' },
+    fixed: { Escape: 'pause', KeyP: 'pause', KeyR: 'restart', Enter: 'enter', NumpadEnter: 'enter', KeyM: 'mute', F1: 'debugGod', F2: 'debugWarp' }
+  });
   var Input = {
     held: {}, edge: {},
     down: function (a) { return !!this.held[a]; },
@@ -22,17 +19,18 @@
     release: function (a) { this.held[a] = false; }
   };
   window.addEventListener('keydown', function (ev) {
-    var a = KEYMAP[ev.code];
-    if (!a && ev.key === 'Enter') a = 'enter';
+    var a = Controls.action(ev.code);
+    if (!a && ev.key === 'Enter' && !Controls.isOpen()) a = 'enter';
     Snd.init();
     if (a) { ev.preventDefault(); Input.press(a); }
   });
   window.addEventListener('keyup', function (ev) {
-    var a = KEYMAP[ev.code];
-    if (!a && ev.key === 'Enter') a = 'enter';
+    var a = Controls.action(ev.code);
+    if (!a && ev.key === 'Enter' && !Controls.isOpen()) a = 'enter';
     if (a) { ev.preventDefault(); Input.release(a); }
   });
   window.addEventListener('blur', function () { Input.held = {}; if (G.state === 'play') G.state = 'paused'; });
+  Controls.onPanel(function () { Input.held = {}; Input.edge = {}; });
 
   // ====================================================================== state
   var G = window.G = {
@@ -880,6 +878,8 @@
     var n = 0;
     while (acc >= DT && n < 20) { step(DT); acc -= DT; Input.endStep(); n++; }
     render();
+    Controls.tick(dt, { menu: G.state === 'title' || G.state === 'paused', playing: G.state === 'play' && G.deathT < 0, deaths: G.deaths,
+      x: player ? player.x : 0, y: player ? player.y : 0, boss: G.bossState === 'intro' || G.bossState === 'fight', god: G.godMode, canvas: canvas });
     requestAnimationFrame(frame);
   }
 

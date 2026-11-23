@@ -37,3 +37,6 @@ python tools/check.py runs/L1/opus-careful
 
 ## Results
 See [results.md](results.md).
+
+## Changes after the runs
+The games are published as the models left them. Any later fix (so far: new default keys, key remapping, on-screen F1/F2 testing keys and a "stuck?" hint in the two A1 games, 23 Nov 2026) is listed, with reasons and dates, in the [changelog on the play page](https://atharva-729.github.io/claude-makes-games/#changelog).

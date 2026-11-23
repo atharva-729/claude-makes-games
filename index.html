@@ -29,6 +29,20 @@
   .featured ul { color:var(--dim); font-size:.92rem; padding-left:18px; margin:10px 0; }
   kbd { background:#222b3a; border:1px solid var(--line); border-radius:4px; padding:0 5px; font-size:.85em; }
   @media (max-width:760px) { .featured { grid-template-columns:1fr; } }
+  .note { color:var(--dim); font-size:.9rem; margin:6px 0 0; }
+  .log { border-left:2px solid var(--line); margin:14px 0 0; padding:0 0 0 18px; }
+  .log .entry { position:relative; margin:0 0 26px; }
+  .log .entry::before { content:""; position:absolute; left:-24px; top:6px; width:10px; height:10px; border-radius:50%; background:var(--accent); }
+  .log .entry.orig::before { background:var(--dim); }
+  .log .date { font-weight:600; }
+  .log .tag { display:inline-block; margin-left:8px; padding:0 7px; border-radius:999px; font-size:.75rem; border:1px solid var(--line); color:var(--dim); vertical-align:2px; }
+  .log ul { color:var(--dim); font-size:.92rem; padding-left:18px; margin:6px 0 0; }
+  .log li { margin:3px 0; }
+  .log b { color:var(--text); font-weight:600; }
+  table.keys { border-collapse:collapse; font-size:.9rem; margin:10px 0 4px; }
+  table.keys th, table.keys td { text-align:left; padding:4px 14px 4px 0; border-bottom:1px solid var(--line); }
+  table.keys th { color:var(--dim); font-weight:500; }
+  table.keys td.new { color:var(--accent); }
   footer { margin-top:56px; color:var(--dim); font-size:.85rem; }
 </style>
 </head>
@@ -36,7 +50,7 @@
 <main>
   <h1>Claude makes games</h1>
   <p class="lead">Experiments in how far AI coding models get when building games on their own. Each game was written start to finish by an AI agent from a single prompt, with no human-written code or assets. Everything, including art and music, is generated in code.</p>
-  <p class="sub">Keyboard required. Best played on desktop. Click a game to play.</p>
+  <p class="sub">Keyboard required. Best played on desktop. Click a game to play.<br>Every game is exactly as its model wrote it, apart from the later fixes listed in the <a href="#changelog">changelog</a> (so far, only to the two boss-fight games' controls).</p>
 
   <h2>Featured: a dark action-platformer with a boss</h2>
   <p class="sub">Built by Fable 5.2 and Opus 5.5 from the same detailed design spec (<a href="https://github.com/atharva-729/claude-makes-games/blob/main/prompts/A1-careful.md">read the prompt</a>).</p>
@@ -51,7 +65,7 @@
         <li>3 enemy types, a hidden secret</li>
         <li>3-phase boss: Vesperhorn, Warden of the Unlit Hour</li>
       </ul>
-      <div class="meta">Move <kbd>←→</kbd>/<kbd>WASD</kbd> · Jump <kbd>Space</kbd> · Slash <kbd>X</kbd> · Dash <kbd>C</kbd> · Heal hold <kbd>F</kbd></div>
+      <div class="meta">Move <kbd>WASD</kbd> · Jump <kbd>Space</kbd> · Slash <kbd>J</kbd> · Dash <kbd>K</kbd> · Bolt <kbd>L</kbd> · Heal hold <kbd>;</kbd> · Remap keys <kbd>O</kbd> · Invincible <kbd>F1</kbd> · Skip to boss <kbd>F2</kbd></div>
       <div class="play">Play →</div>
     </div>
   </a>
@@ -66,7 +80,7 @@
         <li>Rain, rising spikes and falling stalactites in later phases</li>
         <li>3-phase boss: Ossiveth, the Lantern-Glutton</li>
       </ul>
-      <div class="meta">Move <kbd>←→</kbd>/<kbd>WASD</kbd> · Jump <kbd>Space</kbd> · Slash <kbd>X</kbd> · Dash <kbd>C</kbd> · Bolt <kbd>V</kbd> · Heal hold <kbd>F</kbd> · Rest <kbd>↑</kbd></div>
+      <div class="meta">Move <kbd>WASD</kbd> · Jump <kbd>Space</kbd> · Slash <kbd>J</kbd> · Dash <kbd>K</kbd> · Bolt <kbd>L</kbd> · Heal hold <kbd>;</kbd> · Rest <kbd>W</kbd> · Remap keys <kbd>O</kbd> · Invincible <kbd>F1</kbd> · Skip to boss <kbd>F2</kbd></div>
       <div class="play">Play →</div>
     </div>
   </a>
@@ -90,6 +104,49 @@
       <img src="runs/L1/fable-careful/_check.png" alt="Sky Hop">
       <div class="body"><h3>Sky Hop</h3><div class="meta">Fable 5.2 · careful prompt</div><div class="meta">1 level, checkpoints, sound effects</div><div class="play">Play →</div></div>
     </a>
+  </div>
+
+  <h2 id="changelog">Changelog: what was changed after the AI runs</h2>
+  <p class="sub">For research purposes, the original output of each run is kept as is. A later change is made only to fix a playability problem found in play-testing. Each change is listed here, says who made it, and leaves the original code in the git history.</p>
+
+  <div class="log">
+    <div class="entry">
+      <span class="date">23 Nov 2026</span><span class="tag">post-run fix · WICKFALL and GLOAMREACH</span>
+      <p class="note"><b>Why:</b> in play-testing, the pogo (a down-slash in mid-air) was nearly impossible. It meant holding <kbd>S</kbd> and pressing <kbd>X</kbd> at the same time, two neighbouring keys under the same left hand. The invincibility and skip-to-boss keys also existed but appeared nowhere on screen.</p>
+      <p class="note"><b>Who:</b> requested by the author and implemented by Claude Opus 5.5 in a separate session. It is not part of either model's original run.</p>
+      <table class="keys">
+        <tr><th>Action</th><th>Before</th><th>Now (default)</th></tr>
+        <tr><td>Move / aim</td><td>Arrows or WASD</td><td class="new">WASD (arrows still work)</td></tr>
+        <tr><td>Jump</td><td>Space or Z</td><td class="new">Space</td></tr>
+        <tr><td>Slash</td><td>X or J</td><td class="new">J</td></tr>
+        <tr><td>Dash</td><td>C, K or Shift</td><td class="new">K or Shift</td></tr>
+        <tr><td>Bolt</td><td>V or L</td><td class="new">L</td></tr>
+        <tr><td>Heal (hold)</td><td>F</td><td class="new">;</td></tr>
+      </table>
+      <ul>
+        <li><b>New default layout:</b> the left hand moves and the right hand acts, so a pogo is now <kbd>S</kbd> + <kbd>J</kbd>. J, K and L already worked as second keys; they are now the only ones, and the left-hand action keys (Z, X, C, V, F) have been removed so they can't clash with movement. Ctrl is deliberately not used, because Ctrl+W and Ctrl+S trigger browser shortcuts.</li>
+        <li><b>Remappable keys:</b> press <kbd>O</kbd> (or the "Change controls" button) on the title or pause screen to rebind any action. Choosing a key that's already in use swaps the two actions. Bindings are saved in the browser, and "Reset to defaults" restores the layout above.</li>
+        <li><b>Testing keys on screen:</b> the title and pause screens now list <kbd>F1</kbd> (invincibility on/off) and <kbd>F2</kbd> (skip to the boss). Both keys were written by the models during their runs as debug aids, but neither game ever showed them.</li>
+        <li><b>"Stuck?" hint:</b> a line at the bottom of the screen suggests F1 (and F2 outside the boss fight) when any of these is true: you have died 3 or more times (shown for 9 s after each respawn); you have played 75 s without reaching a new part of the map; or a boss fight has lasted over 2.5 minutes. It hides once invincibility is on. These are simple timers and counters, with no pathfinding.</li>
+        <li><b>Key names that follow your bindings:</b> the controls list and the in-world tutorial signs now name whatever keys are currently bound, instead of fixed text such as "X to slash".</li>
+        <li><b>Unchanged:</b> physics, levels, enemies, boss, art, audio and the round-1 games. GLOAMREACH's 31 built-in self-checks still pass.</li>
+        <li><b>Code:</b> one new file, <code>js/controls.js</code>, identical in both games, plus small edits where each game reads keys and draws its controls list and signs. The exact diff is in the <a href="https://github.com/atharva-729/claude-makes-games/commits/main">commit history</a>.</li>
+      </ul>
+    </div>
+    <div class="entry orig">
+      <span class="date">23 Nov 2026</span><span class="tag">new run</span>
+      <ul>
+        <li><b>GLOAMREACH</b> (Opus 5.5, A1 careful prompt, high effort) added: ~3,580 lines in 10 files, ~38 min. Published as the model left it. <a href="https://github.com/atharva-729/claude-makes-games/tree/3d7bc80/runs/A1/opus-careful">Original code</a>.</li>
+      </ul>
+    </div>
+    <div class="entry orig">
+      <span class="date">16 Nov 2026</span><span class="tag">first release</span>
+      <ul>
+        <li><b>Round 1 (L1):</b> four basic platformers (Fable 5.2 and Opus 5.5, each with a generic and a careful prompt). Published as the models left them. These have not been changed since.</li>
+        <li><b>WICKFALL</b> (Fable 5.2, A1 careful prompt): ~2,540 lines in 9 files, ~28 min. <a href="https://github.com/atharva-729/claude-makes-games/tree/34643ee/runs/A1/fable-careful">Original code</a>.</li>
+        <li>This play menu, the prompts and the <a href="https://github.com/atharva-729/claude-makes-games/blob/main/results.md">results write-up</a>.</li>
+      </ul>
+    </div>
   </div>
 
   <footer>Source and prompts: <a href="https://github.com/atharva-729/claude-makes-games">github.com/atharva-729/claude-makes-games</a></footer>
